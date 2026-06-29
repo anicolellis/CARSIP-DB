@@ -12,12 +12,18 @@ class Base(DeclarativeBase):
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__} - {', '.join(f'{k}: {v}' for k, v in self._columns.items())}>"
 
-# Should we make an individual one for each Many-to-Many relationship?
-association_table = Table(
+computer_os_association_table = Table(
     "association_table",
     Base.metadata,
-    Column("left_id", ForeignKey("left_table.id"), primary_key=True),
-    Column("right_id", ForeignKey("right_table.id"), primary_key=True),
+    Column("computer_id", ForeignKey("computer.id"), primary_key=True),
+    Column("os_id", ForeignKey("os.id"), primary_key=True),
+)
+
+computer_cpu_association_table = Table(
+    "association_table",
+    Base.metadata,
+    Column("computer", ForeignKey("computer.id"), primary_key=True),
+    Column("cpu_id", ForeignKey("cpu.id"), primary_key=True),
 )
 
 class Device(Base):
@@ -55,9 +61,9 @@ class Computer(Base):
     cpu_id: Mapped[int] = mapped_column(ForeignKey("cpu.id")) # Many to many
 
     device: Mapped["Device"] = relationship(back_populates="computer")
-    cpus: Mapped[List["CPU"]] = relationship(secondary=association_table, back_populates="computers")
+    cpus: Mapped[List["CPU"]] = relationship(secondary=computer_cpu_association_table, back_populates="computers")
     memory_slots: Mapped[List["MemorySlot"]] = relationship(back_populates="computer")
-    oses: Mapped[List["OS"]] = relationship(secondary=association_table, back_populates="computers")
+    oses: Mapped[List["OS"]] = relationship(secondary=computer_os_association_table, back_populates="computers")
     physical_disks: Mapped[List["PhysicalDisk"]] = relationship(back_populates="computer")
 
     bios_version: Mapped[str] = mapped_column(String(64))
@@ -138,7 +144,7 @@ class CPU(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
-    computers: Mapped[List["Computer"]] = relationship(secondary=association_table, back_populates="cpus")
+    computers: Mapped[List["Computer"]] = relationship(secondary=computer_cpu_association_table, back_populates="cpus")
 
     model: Mapped[str] = mapped_column(String(64))
     clock_speed: Mapped[int] = mapped_column(Integer)
@@ -173,7 +179,7 @@ class OS(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
-    computers: Mapped[List["Computer"]] = relationship(secondary=association_table, back_populates="oses")
+    computers: Mapped[List["Computer"]] = relationship(secondary=computer_os_association_table, back_populates="oses")
 
     name: Mapped[str] = mapped_column(String(64))
     version: Mapped[str] = mapped_column(String(64))
