@@ -26,12 +26,16 @@ def main() -> None:
     parser = ArgumentParser("CARSIP-DB CLI")
 
     # List of CLI arguments
-    parser.add_argument("-c", "--create", action="store_true", help="Whether new tables need to be created.")
-    parser.add_argument("-e", "--enum", action="store_true", help="Whether enum data needs to be added.")
-    parser.add_argument("-r", "--reset", action="store_true", help="Clear all previous data from the DB.")
+    parser.add_argument("-c", "--create", action="store_true", help="Used when creating tables for the first time.")
+    parser.add_argument("-r", "--reset", action="store_true", help="Clear all previous data from the DB before running the script.")
+    parser.add_argument("-u", "--username", type=str, help="Database username.")
+    parser.add_argument("-p", "--password", type=str, help="Database password.")
+    parser.add_argument("-H", "--hostname", type=str, help="Hostname for database.")
+    parser.add_argument("-P", "--port", type=int, help="Port number for database.")
+    parser.add_argument("-n", "--name", type=str, help="Database name.")
     args = parser.parse_args()
 
-    DATABASE_URI="postgresql+psycopg2://nicolellis:atti3WbEAzyjN87WMhBX@localhost:5432/carsip"
+    DATABASE_URI=f"postgresql+psycopg2://{args.username}:{args.password}@{args.hostname}:{args.port}/{args.name}"
 
     global ENGINE, SESSION
 
@@ -39,64 +43,61 @@ def main() -> None:
 
     if args.reset:
         Base.metadata.drop_all(ENGINE)
-        Base.metadata.create_all(ENGINE)
-    elif args.create:
+    if args.create or args.reset:
         Base.metadata.create_all(ENGINE)
     
     # Test connecting via relationships in both directions for all types
     with Session(ENGINE) as session, session.begin():
-
-        if args.enum:
-            #Sector
-            sector_13 = Sector(name="13",
+        #Sector
+        sector_13 = Sector(name="13",
+                        modify_time=datetime.datetime.now(),
+                        create_time=datetime.datetime.now())
+        sector_14 = Sector(name="14",
+                        modify_time=datetime.datetime.now(),
+                        create_time=datetime.datetime.now())
+        sector_15 = Sector(name="15",
+                        modify_time=datetime.datetime.now(),
+                        create_time=datetime.datetime.now())
+        #Location
+        lom_13 = Location(name="13 LOM",
+                        modify_time=datetime.datetime.now(),
+                        create_time=datetime.datetime.now())
+        lom_14 = Location(name="14 LOM",
+                        modify_time=datetime.datetime.now(),
+                        create_time=datetime.datetime.now())
+        lom_15 = Location(name="15 LOM",
+                        modify_time=datetime.datetime.now(),
+                        create_time=datetime.datetime.now())           
+        #Type
+        test_type = Type(name="Test Device",
+                        modify_time=datetime.datetime.now(),
+                        create_time=datetime.datetime.now())
+        #Memory
+        test_mem = Memory(capacity=32, speed=5600,
                             modify_time=datetime.datetime.now(),
                             create_time=datetime.datetime.now())
-            sector_14 = Sector(name="14",
-                            modify_time=datetime.datetime.now(),
-                            create_time=datetime.datetime.now())
-            sector_15 = Sector(name="15",
-                            modify_time=datetime.datetime.now(),
-                            create_time=datetime.datetime.now())
-            #Location
-            lom_13 = Location(name="13 LOM",
-                            modify_time=datetime.datetime.now(),
-                            create_time=datetime.datetime.now())
-            lom_14 = Location(name="14 LOM",
-                            modify_time=datetime.datetime.now(),
-                            create_time=datetime.datetime.now())
-            lom_15 = Location(name="15 LOM",
-                            modify_time=datetime.datetime.now(),
-                            create_time=datetime.datetime.now())           
-            #Type
-            test_type = Type(name="Test Device",
-                            modify_time=datetime.datetime.now(),
-                            create_time=datetime.datetime.now())
-            #Memory
-            test_mem = Memory(capacity=32, speed=5600,
-                              modify_time=datetime.datetime.now(),
-                              create_time=datetime.datetime.now())
-            #CPU
-            test_cpu = CPU(model="Intel Xeon Gold 5415+",
-                           clock_speed=2900,
-                           physical_cores=8,
-                           logical_cores=16,
-                           modify_time=datetime.datetime.now(),
-                           create_time=datetime.datetime.now())
-            #OS
-            win11 = OS(name="Microsoft Windows 11 Enterprise",
-                       version="10.0.26200.8457",
-                       build="25H2",
-                       modify_time=datetime.datetime.now(),
-                       create_time=datetime.datetime.now())
-            #PhysicalDiskType
-            test_disktype = PhysicalDiskType(model="Intel Raid 1 Volume",
-                                         capacity=954,
-                                         type="SSD",
-                                         modify_time=datetime.datetime.now(),
-                                         create_time=datetime.datetime.now())
-            
-            session.add_all([sector_13, sector_14, sector_15, lom_13, lom_14, lom_15, 
-                             test_type, test_mem, test_cpu, win11, test_disktype])
+        #CPU
+        test_cpu = CPU(model="Intel Xeon Gold 5415+",
+                        clock_speed=2900,
+                        physical_cores=8,
+                        logical_cores=16,
+                        modify_time=datetime.datetime.now(),
+                        create_time=datetime.datetime.now())
+        #OS
+        win11 = OS(name="Microsoft Windows 11 Enterprise",
+                    version="10.0.26200.8457",
+                    build="25H2",
+                    modify_time=datetime.datetime.now(),
+                    create_time=datetime.datetime.now())
+        #PhysicalDiskType
+        test_disktype = PhysicalDiskType(model="Intel Raid 1 Volume",
+                                        capacity=954,
+                                        type="SSD",
+                                        modify_time=datetime.datetime.now(),
+                                        create_time=datetime.datetime.now())
+        
+        session.add_all([sector_13, sector_14, sector_15, lom_13, lom_14, lom_15, 
+                            test_type, test_mem, test_cpu, win11, test_disktype])
         #Examples used: CARS5 and CHEMMAT-F126
         #Device
         test_device = Device(location_id=1,
