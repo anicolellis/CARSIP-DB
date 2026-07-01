@@ -136,7 +136,7 @@ class Interface(Base):
     name: Mapped[str] = mapped_column(String(64))
     mac_address: Mapped[str] = mapped_column(String(64))
     manufacturer: Mapped[str] = mapped_column(String(64))
-    speed: Mapped[int] = mapped_column(Integer)
+    speed: Mapped[int] = mapped_column(Integer) #Mbps
     status: Mapped[str] = mapped_column(String(64))
 
 class CPU(Base):
@@ -147,7 +147,7 @@ class CPU(Base):
     computers: Mapped[List["Computer"]] = relationship(secondary=computer_cpu_association_table, back_populates="cpus")
 
     model: Mapped[str] = mapped_column(String(64))
-    clock_speed: Mapped[int] = mapped_column(Integer)
+    clock_speed: Mapped[int] = mapped_column(Integer) #MHz
     physical_cores: Mapped[int] = mapped_column(Integer)
     logical_cores: Mapped[int] = mapped_column(Integer)
 
@@ -159,7 +159,7 @@ class Memory(Base):
     memory_slots: Mapped[List["MemorySlot"]] = relationship(back_populates="memory")
 
     capacity: Mapped[int] = mapped_column(Integer)
-    speed: Mapped[int] = mapped_column(Integer)
+    speed: Mapped[int] = mapped_column(Integer) #MHz
 
 class MemorySlot(Base):
     __tablename__ = "memory_slot"
@@ -222,4 +222,4 @@ class Volume(Base):
 
     capacity: Mapped[int] = mapped_column(Integer)
     file_system: Mapped[str] = mapped_column(String(64))
-    usage: Mapped[str] = mapped_column(String(64))
+    usage: Mapped[str] = mapped_column(String(64)) # How do we want to represent this - percentage or number of GB used
