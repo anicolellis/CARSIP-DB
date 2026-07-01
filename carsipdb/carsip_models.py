@@ -5,22 +5,22 @@ from sqlalchemy import DateTime, Integer, String, Text, Boolean, ForeignKey, Col
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 class Base(DeclarativeBase):
-    # Can you create shared fields like this?
     modify_time: Mapped[datetime.datetime] = mapped_column(DateTime, default=datetime.datetime.now)
     create_time: Mapped[datetime.datetime] = mapped_column(DateTime, default=datetime.datetime.now)
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__} - {', '.join(f'{k}: {v}' for k, v in self._columns.items())}>"
 
+# Do the association tables need the modify and create times, or is it ok to just have them for the objects they reference?
 computer_os_association_table = Table(
-    "association_table",
+    "computer_os_association_table",
     Base.metadata,
     Column("computer_id", ForeignKey("computer.id"), primary_key=True),
     Column("os_id", ForeignKey("os.id"), primary_key=True),
 )
 
 computer_cpu_association_table = Table(
-    "association_table",
+    "computer_cpu_association_table",
     Base.metadata,
     Column("computer", ForeignKey("computer.id"), primary_key=True),
     Column("cpu_id", ForeignKey("cpu.id"), primary_key=True),
@@ -38,7 +38,7 @@ class Device(Base):
     location: Mapped["Location"] = relationship(back_populates="devices")
     sector: Mapped["Sector"] = relationship(back_populates="devices")
     type: Mapped["Type"] = relationship(back_populates="devices")
-    computer: Mapped[Optional["Device"]] = relationship(back_populates="device")
+    computer: Mapped[Optional["Computer"]] = relationship(back_populates="device")
     dhcp: Mapped["DHCP"] = relationship(back_populates="device")
     interfaces: Mapped[List["Interface"]] = relationship(back_populates="device")
 
