@@ -175,7 +175,7 @@ class PhysicalDiskType(Base, table=True):
 class Volume(Base, table=True):
     id: int | None = Field(default=None, primary_key=True)
 
-    capacity: int
+    capacity: float
     file_system: str
     usage: str
 
