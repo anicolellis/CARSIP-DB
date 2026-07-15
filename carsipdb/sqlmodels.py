@@ -36,7 +36,7 @@ class Device(Base, table=True):
     location: "Location" = Relationship(back_populates="devices")
     sector: "Sector" = Relationship(back_populates="devices")
     type: "Type" = Relationship(back_populates="devices")
-    computer: "Computer" | None = Relationship(back_populates="device")
+    computer: "Computer" = Relationship(back_populates="device")
     dhcp: "DHCP" = Relationship(back_populates="device")
     interfaces: list["Interface"] = Relationship(back_populates="device")
 
@@ -157,7 +157,7 @@ class PhysicalDisk(Base, table=True):
     firmware: str
 
     computer_id: int | None = Field(default=None, foreign_key="computer.id")
-    physical_disk_type_id: int | None = Field(default=None, foreign_key="physical_disk_type.id")
+    physicaldisktype_id: int | None = Field(default=None, foreign_key="physicaldisktype.id")
 
     computer: Computer = Relationship(back_populates="physical_disks")
     physical_disk_type: "PhysicalDiskType" = Relationship(back_populates="physical_disks")
@@ -179,6 +179,6 @@ class Volume(Base, table=True):
     file_system: str
     usage: str
 
-    physical_disk_id: int | None = Field(default=None, foreign_key="physical_disk.id")
+    physicaldisk_id: int | None = Field(default=None, foreign_key="physicaldisk.id")
 
     physical_disk: PhysicalDisk = Relationship(back_populates="volumes")
