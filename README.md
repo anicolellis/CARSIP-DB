@@ -70,7 +70,6 @@ CARSIP-DB is designed to be forked and extended. Contributors fork the repositor
 ### Running the Application
 
 ```bash
-uv run carsip-db -c -u <db username> -p <db password> -H localhost -P 5432 -n <db name> # First time running the application
 uv run carsip-db -r -u <db username> -p <db password> -H localhost -P 5432 -n <db name> # Using the -r flag to reset the database before running
 ```
 
