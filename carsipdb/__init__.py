@@ -14,8 +14,8 @@ from argparse import ArgumentParser
 from sqlalchemy import create_engine as create_alch_engine
 from sqlmodel import create_engine as create_smodel_engine
 
-from carsipdb.utils import *
-from carsipdb.sqlmodels import *
+from carsipdb.utils import alchemy_sample_data
+from carsipdb.sqlmodel_test_script import sqlmodel_sample_data, sqlmodel_validate_data
 
 A_ENGINE = None
 S_ENGINE = None
