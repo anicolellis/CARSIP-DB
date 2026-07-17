@@ -1,7 +1,26 @@
+from datetime import datetime
+
 from sqlmodel import SQLModel, Session
 from pydantic import ValidationError
 
-from carsipdb.sqlmodels import *
+from carsipdb.sqlmodels import (
+    Device,
+    Computer,
+    DHCP,
+    DNS,
+    Type,
+    Location,
+    Sector,
+    Interface,
+    CPU,
+    Memory,
+    MemorySlot,
+    OS,
+    PhysicalDisk,
+    PhysicalDiskType,
+    Volume,
+)
+
 
 # Creates test data in JSON form and validates using Pydantic before adding to the DB
 def sqlmodel_validate_data(reset, engine) -> None:
@@ -13,70 +32,25 @@ def sqlmodel_validate_data(reset, engine) -> None:
 
     with Session(engine) as session, session.begin():
         # Sector
-        s13 = {
-            "name": "13",
-            "modify_time": timestamp,
-            "create_time": timestamp
-        }
-        s14 = {
-            "name": "14",
-            "modify_time": timestamp,
-            "create_time": timestamp
-        }
-        s15 = {
-            "name": "15",
-            "modify_time": timestamp,
-            "create_time": timestamp
-        }
+        s13 = {"name": "13", "modify_time": timestamp, "create_time": timestamp}
+        s14 = {"name": "14", "modify_time": timestamp, "create_time": timestamp}
+        s15 = {"name": "15", "modify_time": timestamp, "create_time": timestamp}
         # Location
-        l13 = {
-            "name": "13 LOM",
-            "modify_time": timestamp,
-            "create_time": timestamp
-        }
-        l14 = {
-            "name": "14 LOM",
-            "modify_time": timestamp,
-            "create_time": timestamp
-        }
-        l15 = {
-            "name": "15 LOM",
-            "modify_time": timestamp,
-            "create_time": timestamp
-        }
-        testtype = {
-            "name": "Test Device",
-            "modify_time": timestamp,
-            "create_time": timestamp
-        }
-        testmem = {
-            "capacity": 32,
-            "speed": 5600,
-            "modify_time": timestamp,
-            "create_time": timestamp
-        }
+        l13 = {"name": "13 LOM", "modify_time": timestamp, "create_time": timestamp}
+        l14 = {"name": "14 LOM", "modify_time": timestamp, "create_time": timestamp}
+        l15 = {"name": "15 LOM", "modify_time": timestamp, "create_time": timestamp}
+        testtype = {"name": "Test Device", "modify_time": timestamp, "create_time": timestamp}
+        testmem = {"capacity": 32, "speed": 5600, "modify_time": timestamp, "create_time": timestamp}
         testcpu = {
             "model": "Intel Xeon Gold 5415+",
             "clock_speed": 2900,
             "physical_cores": 8,
             "logical_cores": 16,
             "modify_time": timestamp,
-            "create_time": timestamp
+            "create_time": timestamp,
         }
-        testos = {
-            "name": "Microsoft Windows 11 Enterprise",
-            "version": "10.0.26200.8457",
-            "build": "25H2",
-            "modify_time": timestamp,
-            "create_time": timestamp
-        }
-        testdisktype = {
-            "model": "Intel Raid 1 Volume",
-            "capacity": 954,
-            "type": "SSD",
-            "modify_time": timestamp,
-            "create_time": timestamp
-        }
+        testos = {"name": "Microsoft Windows 11 Enterprise", "version": "10.0.26200.8457", "build": "25H2", "modify_time": timestamp, "create_time": timestamp}
+        testdisktype = {"model": "Intel Raid 1 Volume", "capacity": 954, "type": "SSD", "modify_time": timestamp, "create_time": timestamp}
         try:
             sector_13 = Sector.model_validate(s13)
             sector_14 = Sector.model_validate(s14)
@@ -109,7 +83,7 @@ def sqlmodel_validate_data(reset, engine) -> None:
             "status": "Test",
             "owners": "Alex",
             "modify_time": timestamp,
-            "create_time": timestamp
+            "create_time": timestamp,
         }
         comp = {
             "device_id": 1,
@@ -119,14 +93,9 @@ def sqlmodel_validate_data(reset, engine) -> None:
             "cpu_count": 1,
             "memory_total": 64,
             "modify_time": timestamp,
-            "create_time": timestamp
+            "create_time": timestamp,
         }
-        dns = {
-            "name": "Test",
-            "ip_address": "1.2.3.4",
-            "modify_time": timestamp,
-            "create_time": timestamp
-        }
+        dns = {"name": "Test", "ip_address": "1.2.3.4", "modify_time": timestamp, "create_time": timestamp}
         dhcp = {
             "device_id": 1,
             "dns_id": 1,
@@ -134,7 +103,7 @@ def sqlmodel_validate_data(reset, engine) -> None:
             "mac_address": "00:11:22:33:44:55",
             "ip_address": "1.2.3.4",
             "modify_time": timestamp,
-            "create_time": timestamp
+            "create_time": timestamp,
         }
         interf = {
             "device_id": 1,
@@ -144,31 +113,11 @@ def sqlmodel_validate_data(reset, engine) -> None:
             "speed": 1000,
             "status": "Connected",
             "modify_time": timestamp,
-            "create_time": timestamp
+            "create_time": timestamp,
         }
-        memslot = {
-            "computer_id": 1,
-            "memory_id": 1,
-            "slot_number": 0,
-            "modify_time": timestamp,
-            "create_time": timestamp
-        }
-        disk = {
-            "computer_id": 1,
-            "physicaldisktype_id": 1,
-            "smart_status": "OK",
-            "firmware": "1.0.",
-            "modify_time": timestamp,
-            "create_time": timestamp
-        }
-        volume = {
-            "physicaldisk_id": 1,
-            "capacity": 952.6,
-            "file_system": "NTFS",
-            "usage": "17%",
-            "modify_time": timestamp,
-            "create_time": timestamp
-        }
+        memslot = {"computer_id": 1, "memory_id": 1, "slot_number": 0, "modify_time": timestamp, "create_time": timestamp}
+        disk = {"computer_id": 1, "physicaldisktype_id": 1, "smart_status": "OK", "firmware": "1.0.", "modify_time": timestamp, "create_time": timestamp}
+        volume = {"physicaldisk_id": 1, "capacity": 952.6, "file_system": "NTFS", "usage": "17%", "modify_time": timestamp, "create_time": timestamp}
         try:
             test_device = Device.model_validate(device)
             test_computer = Computer.model_validate(comp)
@@ -200,9 +149,21 @@ def sqlmodel_validate_data(reset, engine) -> None:
         test_computer.device = test_device
         test_device.dhcp = test_dhcp
         test_dhcp.dns = test_dns
-        test_device.location = session.get(Location, 1)
-        test_device.sector = session.get(Sector, 1)
-        test_device.type = session.get(Type, 1)
+        loc = session.get(Location, 1)
+        if loc is None:
+            print("Error: Test Location not found")
+        else:
+            test_device.location = loc
+        sect = session.get(Sector, 1)
+        if sect is None:
+            print("Error: Test Sector not found")
+        else:
+            test_device.sector = sect
+        typ = session.get(Type, 1)
+        if typ is None:
+            print("Error: Test Type not found")
+        else:
+            test_device.type = typ
         test_interface.device = test_device
         test_mem_slot.computer = test_computer
         test_mem_slot.memory = test_mem
@@ -210,9 +171,14 @@ def sqlmodel_validate_data(reset, engine) -> None:
         test_disk.physical_disk_type = test_disktype
         test_volume.physical_disk = test_disk
         test_computer.cpus = [test_cpu]
-        test_computer.oses = [session.get(OS, 1)]
+        ose = session.get(OS, 1)
+        if ose is None:
+            print("Error: Test OS not found")
+        else:
+            test_computer.oses = [ose]
 
         session.add_all([test_device, test_computer, test_dns, test_dhcp, test_interface, test_mem_slot, test_disk, test_volume])
+
 
 # Creates test data using SQLModel models
 def sqlmodel_sample_data(reset, engine) -> None:
@@ -251,9 +217,7 @@ def sqlmodel_sample_data(reset, engine) -> None:
             create_time=datetime.now(),
         )
         # PhysicalDiskType
-        test_disktype = PhysicalDiskType(
-            model="Intel Raid 1 Volume", capacity=954, type="SSD", modify_time=datetime.now(), create_time=datetime.now()
-        )
+        test_disktype = PhysicalDiskType(model="Intel Raid 1 Volume", capacity=954, type="SSD", modify_time=datetime.now(), create_time=datetime.now())
 
         session.add_all([sector_13, sector_14, sector_15, lom_13, lom_14, lom_15, test_type, test_mem, test_cpu, win11, test_disktype])
         # Examples used: CARS5 and CHEMMAT-F126
@@ -312,12 +276,10 @@ def sqlmodel_sample_data(reset, engine) -> None:
         test_mem_slot = MemorySlot(computer_id=1, memory_id=1, slot_number=0, modify_time=datetime.now(), create_time=datetime.now())
         # PhysicalDisk
         test_disk = PhysicalDisk(
-            computer_id=1, physical_disk_type_id=1, smart_status="OK", firmware="1.0.", modify_time=datetime.now(), create_time=datetime.now()
+            computer_id=1, physicaldisktype_id=1, smart_status="OK", firmware="1.0.", modify_time=datetime.now(), create_time=datetime.now()
         )
         # Volume
-        test_volume = Volume(
-            physical_disk_id=1, capacity=952.6, file_system="NTFS", usage="17%", modify_time=datetime.now(), create_time=datetime.now()
-        )
+        test_volume = Volume(physicaldisk_id=1, capacity=952.6, file_system="NTFS", usage="17%", modify_time=datetime.now(), create_time=datetime.now())
         """Relationships:
         One to one: Computer, Device
                     Device, DHCP
@@ -337,9 +299,21 @@ def sqlmodel_sample_data(reset, engine) -> None:
         test_computer.device = test_device
         test_device.dhcp = test_dhcp
         test_dhcp.dns = test_dns
-        test_device.location = session.get(Location, 1)
-        test_device.sector = session.get(Sector, 1)
-        test_device.type = session.get(Type, 1)
+        loc = session.get(Location, 1)
+        if loc is None:
+            print("Error: Test Location not found")
+        else:
+            test_device.location = loc
+        sect = session.get(Sector, 1)
+        if sect is None:
+            print("Error: Test Sector not found")
+        else:
+            test_device.sector = sect
+        typ = session.get(Type, 1)
+        if typ is None:
+            print("Error: Test Type not found")
+        else:
+            test_device.type = typ
         test_interface.device = test_device
         test_mem_slot.computer = test_computer
         test_mem_slot.memory = test_mem
@@ -347,6 +321,10 @@ def sqlmodel_sample_data(reset, engine) -> None:
         test_disk.physical_disk_type = test_disktype
         test_volume.physical_disk = test_disk
         test_computer.cpus = [test_cpu]
-        test_computer.oses = [session.get(OS, 1)]
+        ose = session.get(OS, 1)
+        if ose is None:
+            print("Error: Test OS not found")
+        else:
+            test_computer.oses = [ose]
 
         session.add_all([test_device, test_computer, test_dns, test_dhcp, test_interface, test_mem_slot, test_disk, test_volume])

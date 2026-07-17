@@ -2,7 +2,7 @@ import datetime
 from dataclasses import dataclass, field
 from typing import List, Optional
 
-from sqlalchemy import DateTime, Integer, String, Text, Boolean, ForeignKey, Column, Table
+from sqlalchemy import DateTime, Integer, String, Text, Boolean, ForeignKey, Column, Table, Float
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -406,7 +406,7 @@ class Volume(Base):
 
     physical_disk: Mapped["PhysicalDisk"] = relationship(back_populates="volumes")
 
-    capacity: Mapped[int] = mapped_column(Integer)
+    capacity: Mapped[float] = mapped_column(Float)
     file_system: Mapped[str] = mapped_column(String(64))
     usage: Mapped[str] = mapped_column(String(64))  # How do we want to represent this - percentage or number of GB used
 

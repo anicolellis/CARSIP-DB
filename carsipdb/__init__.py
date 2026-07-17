@@ -14,8 +14,9 @@ from argparse import ArgumentParser
 from sqlalchemy import create_engine as create_alch_engine
 from sqlmodel import create_engine as create_smodel_engine
 
-from carsipdb.utils import alchemy_sample_data
-from carsipdb.sqlmodel_test_script import sqlmodel_sample_data, sqlmodel_validate_data
+# from carsipdb.utils import alchemy_sample_data
+# from carsipdb.sqlmodel_test_script import sqlmodel_sample_data
+from carsipdb.sqlmodel_test_script import sqlmodel_validate_data
 
 A_ENGINE = None
 S_ENGINE = None
@@ -43,5 +44,5 @@ def main() -> None:
     S_ENGINE = create_smodel_engine(DATABASE_URI, echo=True)
 
     sqlmodel_validate_data(args.reset, S_ENGINE)
-    #sqlmodel_sample_data(args.reset, S_ENGINE)
-    #alchemy_sample_data(args.reset, A_ENGINE)
+    # sqlmodel_sample_data(args.reset, S_ENGINE)
+    # alchemy_sample_data(args.reset, A_ENGINE)

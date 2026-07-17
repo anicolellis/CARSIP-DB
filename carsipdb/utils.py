@@ -33,6 +33,7 @@ from carsipdb.carsip_models import (
     Volume,
 )
 
+
 # Creates test data for each SQLAlchemy model
 def alchemy_sample_data(reset, engine) -> None:
     if reset:
@@ -157,9 +158,21 @@ def alchemy_sample_data(reset, engine) -> None:
         test_computer.device = test_device
         test_device.dhcp = test_dhcp
         test_dhcp.dns = test_dns
-        test_device.location = session.get(Location, 1)
-        test_device.sector = session.get(Sector, 1)
-        test_device.type = session.get(Type, 1)
+        loc = session.get(Location, 1)
+        if loc is None:
+            print("Error: Test Location not found")
+        else:
+            test_device.location = loc
+        sect = session.get(Sector, 1)
+        if sect is None:
+            print("Error: Test Sector not found")
+        else:
+            test_device.sector = sect
+        typ = session.get(Type, 1)
+        if typ is None:
+            print("Error: Test Type not found")
+        else:
+            test_device.type = typ
         test_interface.device = test_device
         test_mem_slot.computer = test_computer
         test_mem_slot.memory = test_mem
@@ -167,6 +180,10 @@ def alchemy_sample_data(reset, engine) -> None:
         test_disk.physical_disk_type = test_disktype
         test_volume.physical_disk = test_disk
         test_computer.cpus = [test_cpu]
-        test_computer.oses = [session.get(OS, 1)]
+        ose = session.get(OS, 1)
+        if ose is None:
+            print("Error: Test OS not found")
+        else:
+            test_computer.oses = [ose]
 
         session.add_all([test_device, test_computer, test_dns, test_dhcp, test_interface, test_mem_slot, test_disk, test_volume])
